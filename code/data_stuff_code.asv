@@ -12,7 +12,7 @@ T= readtable('da_59.xlsx','Format','auto');
 %Musicengineeringanswers=zeros(2);
 Musicengineeringanswers=string(T{:,2});
 for i=3:135
-    Musicengineeringanswers=cat(2,Musicengineeringanswers,string(T{:,i}));
+    Musicengineeringanswers(:,i-1)=cat(1,Musicengineeringanswers,string(T{:,i}));
 end
 clear i
 %Musicengineeringanswers=T(:,2:135);

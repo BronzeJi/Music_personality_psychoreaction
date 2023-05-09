@@ -1,5 +1,50 @@
 %clear outResults
-%clear
+clear
+close all
+%% 0 Loading data
+%load("importeddata.mat");
+T= readtable('data/da_59.xlsx','Format','auto');
+currentFolder = pwd;
+     %       ^^^^^^^^^------ your csv filename
+%p=T{:,1};
+%q=T{:,2};
+%save('importeddata_1.mat','p','q')
+  %   ^^^^^^^^^----- your resulting .mat filename   
+%Musicengineeringanswers=zeros(2);
+Musicengineeringanswers=string(T{:,2});
+for i=3:135
+    Musicengineeringanswers=cat(2,Musicengineeringanswers,string(T{:,i}));
+end
+clear i
+%Musicengineeringanswers=T(:,2:135);
+%% Remove text emotions
+
+person.song.Rock = textRemover(Musicengineeringanswers(:,8:16));
+
+person.song.Metal = textRemover(Musicengineeringanswers(:,17:25));
+
+person.song.Techno = textRemover(Musicengineeringanswers(:,26:34));
+
+person.song.EDM = textRemover(Musicengineeringanswers(:,35:43));
+
+person.song.Hardstyle = textRemover(Musicengineeringanswers(:,44:52));
+
+person.song.Jazz = textRemover(Musicengineeringanswers(:,53:61));
+
+person.song.Classical = textRemover(Musicengineeringanswers(:,62:70));
+
+person.song.Pop = textRemover(Musicengineeringanswers(:,71:79));
+
+person.song.RnB = textRemover(Musicengineeringanswers(:,80:88));
+
+person.song.Film = textRemover(Musicengineeringanswers(:,89:97));
+
+person.song.Kpop = textRemover(Musicengineeringanswers(:,98:106));
+
+person.song.Indie = textRemover(Musicengineeringanswers(:,107:115));
+
+person.song.PlayMusic = yesNo_data_remover(Musicengineeringanswers(:,6));
+
 %% 1
 %expNo=fieldnames(da.experiment_4_data);
 genreName = fieldnames(person.song);
@@ -23,23 +68,13 @@ P_labels{4}="Agressive";
 P_labels{5}="Calm";
 P_labels{6}="Annoyed";
 P_labels{7}="Pleased";
-P_labels{8}="Like songs?";
+P_labels{8}="Like";
 P_labels{9}="Emotional";
-%P_labels{10}="Know song?";
+%P_labels{10}="Know";
 
 %% 2 spider plot
 % need to fix the scale of the plot
 
-%data
-% P=zeros(5,5,12); %12 songs
-% for j=1:12
-%     for i=1:labeldim
-%         P(1:3,i,j)=cat(2,outResults.("song"+num2str(i))(:,j));
-%     end
-%     P(4,:,j)=[9 9 9 9 9];
-%     P(5,:,j)=[1 1 1 1 1];
-% end
-% clear j
 
 % for ii = 1:num_of_points
 %     P_labels{ii} = sprintf('Label %i', ii);
@@ -76,6 +111,34 @@ end
  legend('Arithmetic Mean','Lower CI','Upper CI','Location', 'best','FontSize', 12);
     hold off
 clear z
+saveas(gcf,fullfile(currentFolder,'/figure/spider.png'));
+
+%% 2 Correlation
+%data
+P=zeros(10,12); %12 songs
+for j=1:12
+    for i=1:9 %9 label
+        P(i,j)=cat(2,outResults.("song"+num2str(j))(1,i));
+    end
+end
+clear j
+
+cormatrix=zeros(9,9); %correlation matrix 
+for i=1:9
+    for j=1:9
+        tempcor=corrcoef(P(i,:),P(j,:));
+        cormatrix(i,j)=tempcor(1,2);
+%         cormatrix(j,j)=tempcor(2,1);
+        clear tempcor;
+    end
+end
+clear i
+%%
+figure(2);
+heatmap(P_labels,P_labels,cormatrix);
+saveas(gcf,fullfile(currentFolder,'figure/Cor_sur.png'));
+%%
+
 
 
 
