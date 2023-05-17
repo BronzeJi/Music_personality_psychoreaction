@@ -16,15 +16,15 @@ def play_music(filename, name):
         while not stop:
             pygame.mixer.init()
             pygame.mixer.music.load(filename)
-            tag_file(name[0])
+            tag_file(name[0])#tag in file when music starts
             tag_file(name[1])
             pygame.mixer.music.play()
             while pygame.mixer.music.get_busy():
                 time.sleep(0.1)
             print("Thank You :)")
-            tag_file(name[0])
+            tag_file(name[0])#tag in file when music ends
             tag_file(name[1])
-            time.sleep(2)# 5 second pause 
+            time.sleep(1) # 1 second pause 
             stop=True
         #comment=input("Any comments?");
     except Exception as e:
@@ -61,7 +61,7 @@ def read_GSR(ser, name):
                 with open(name + '.txt', 'a') as file:
                     data = ser.readline().decode().strip()
                     file.write(data + '\n')
-        print("GSR file saved")
+        print("GSR file is saved")
     except Exception as e:
         # Handle the exception here or print a custom error message
         print("An error occurred while reading GSR:", str(e))
@@ -75,7 +75,9 @@ def read_EEG(ser, name):
                 with open(name + '.txt', 'a') as file:
                     data = ser.readline().strip()
                     file.write(data.hex() + '\n')  
-        print("EEG file saved")    
+        print("EEG file is saved")  
+        comment=input("Comments? ")
+        print(Fore.BLUE+"Have a lovely day!")  
     except Exception as e:
         # Handle the exception here or print a custom error message
         print("An error occurred while reading EEG:", str(e))
@@ -83,11 +85,11 @@ def read_EEG(ser, name):
 def main():
 
     
-    input(Fore.GREEN+"W E L C O M E ! ! !\n (Press enter to continue. )")
+    input(Fore.GREEN+"W E L C O M E ! ! !\n (Press enter to continue.)\n (If you feel uncomfortable, you can quit anytime by pressing Ctrl+C)")
     personCode = input(Style.RESET_ALL+"Type your code here (the one used in the survey): ")
     emotion = input("How do you feel today: ")
     command = input("Are you ready? Lets play music !\n\
-(Press enter to continue. If you feel uncomfortable, you can quit anytime by pressing Ctrl+C)")
+(Press enter to continue.)")
 
     port1 = '/dev/ttyUSB0'  # Replace with the actual port for device 1
     port2 = '/dev/rfcomm0'  # Replace with the actual port for device 2
@@ -109,8 +111,7 @@ def main():
     thread3.start()
     thread1.start()
     thread2.start()
-    
-    comment=input("Any comments?");
+
 
 if __name__ == '__main__':
     main()
