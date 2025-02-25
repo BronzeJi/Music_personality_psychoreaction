@@ -1,6 +1,6 @@
 # Music_personality_psyiologycal reaction (without MBTI investigation part yet)
 
-
+Full description[https://bronzeji.github.io/2023/05/26/Physiological-experiment-with-sensor-GSR-EEG/]
 The code intends to investigate the relationship between emotions and psychological reactions
 
 The experiment is designed as below:
